@@ -22,4 +22,4 @@ pip install -e .
 ### TODO
 - Fix logging
 - Add grade category analysis
-- 
+- Add interactive hover notebook for model comparison
