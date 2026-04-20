@@ -1,0 +1,11 @@
+data:
+  input_dir: "data/raw/"
+  processed_dir: "data/processed/"
+  pickles_dir: "out/pickles/"
+
+logging:
+  model_comparison_log: "mc_logger"
+
+model_comparison:
+  binary_metrics: ['pr_auc', 'accuracy', 'precision', 'recall', 'f1']
+  regression_metrics: ['rmse', 'mae', 'r2']

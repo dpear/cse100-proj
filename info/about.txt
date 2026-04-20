@@ -1,0 +1,51 @@
+I just submitted grades for this quarter, so I've attached all of my grade spreadsheets for CSE 100 (and its remote course designation: 100R) 
+for all quarters in which CSE 100R was offered. For context, here's the course description:
+
+https://catalog.ucsd.edu/courses/CSE.html#cse100
+
+I have removed the first few columns, which had identifiable data about the student. Thus, every row in the spreadsheet is a student, and the columns are as follows:
+The red columns are the raw points for each assessment (these should be consistent in 100 and 100R across quarters)
+The yellow columns are the red columns, but normalized to be a percentage as a decimal (these should be consistent in 100 and 100R across quarters)
+The blue columns are the grade categories (these have changed across quarters, so they're only consistent across 100 vs. 100R in the same quarter)
+The green column (Total) is the overall grade in the class, which gets translated into a letter grade separately (this, as well as the letter grade cut-offs, has changed across quarters, so it's only consistent across 100 vs. 10) in the same quarter)
+Importantly, as I mentioned before, even though "CSE 100R" is the designated "Remote" version of the course and "CSE 100" is the designated "In-Person" version of the course, I told students on day 1 (and in the Syllabus) that there is literally no distinction between the two: CSE 100 students can attend remotely, and CSE 100R students can attend in-person (the course was being taught as a single large class containing the union of the two sections).
+
+I think the most interesting analysis to start with (which would also be the simplest) would be to compare CSE 100 vs. 100R students in each individual quarter, e.g. a split violin plot where the vertical axis is total overall grade and the horizontal axis is categorical for each quarter (e.g. Fall 2022, Winter 2023, Fall 2023, etc.), and the 2 halves of the violin for a given quarter are CSE 100 (left half) and 100R (right half). 
+If we notice that the CSE 100R distribution is statistically significantly lower than the CSE 100 distribution across quarters 
+(e.g. using the one-sided Kolmogorov-Smirnov test), 
+that would be an interesting finding for a CCSC-SW 2026 lightning talk.
+
+In general, feel free to play around with the data to explore any questions you think are interesting, but again, 
+beware of the differences in grade category and overall grade calculations across quarters 
+(red and yellow columns can be reasonably compared across quarters, but blue and green can't; 
+100 vs. 100R can be compared in any column in a single quarter).
+
+
+- Fall 2025 (this quarter) was the only quarter in which exams were timed in-person self-scheduled closed-book proctored exams 
+(Midterm had a 3 week window and was 45 minutes; 
+Final had a 1 week window and was 1 hour 50 minutes). 
+All other quarters had timed online open-book unproctored exams that were 
+each available for a 24-hour window of time (Midterm was 1 hour; Final was 3 hours)
+
+- Winter 2024 (last time I taught it) and Fall 2025 (this quarter) 
+had the exact same grading scheme (minimum of 3 grade categories: 
+Preparation = Reading Quizzes, 
+Application = Programming Assignments + Projects, and 
+Examination = Midterm + Final), 
+so the only distinctions between these 2 quarters are 
+(1) in-person proctored in Fall 2025 vs. online unproctored in Winter 2024, and 
+(2) the amount of time students had to take each exam
+
+
+"... the most interesting analysis to start with (which would also be the simplest) 
+would be to compare CSE 100 vs. 100R students in each individual quarter, 
+e.g. a split violin plot where the vertical axis is total overall grade and the 
+horizontal axis is categorical for each quarter 
+(e.g. Fall 2022, Winter 2023, Fall 2023, etc.), and 
+the 2 halves of the violin for a given quarter are CSE 100 (left half) and 100R (right half)."
+
+
+I had to change one column in the following from "Overall" to "Total"
+
+grades/08-Grades_CSE100_2025-4_Fall.xlsx
+grades/07-Grades_CSE100_2025-1_Winter.xlsx
