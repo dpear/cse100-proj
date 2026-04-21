@@ -3,30 +3,18 @@ from cse100proj.utils import load_config
 import pandas as pd
 import numpy as np
 import os
-import re
-
-import seaborn as sns
 
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import cross_validate, StratifiedKFold
 from sklearn.metrics import accuracy_score, precision_score, \
     recall_score, f1_score, auc, precision_recall_curve
 import inspect
-import logging
+# import logging
 from sklearn.utils import all_estimators
 
 from cse100proj.preprocessing import (
     get_reg_cols,
 )
-
-config = load_config()
-
-DIR = config['data']['processed_dir']
-LOG = config['logging']['model_comparison_log']
-files = os.listdir(DIR)
-files = sorted(files)
-
-
 
 def report_error_bin(clf, X, y, cv=5):
     """
