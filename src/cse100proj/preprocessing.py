@@ -114,8 +114,6 @@ def get_df_sub(files):
     df2['course'] = df2['quarter'].astype(str) + df2['year'].astype(str)
     df2['exam_type'] = 'inperson'    
 
-    print(df.columns)
-
     df = pd.concat([df1, df2], ignore_index=True)
     df_sub = df[['Preparation','Application', 'Examination', 'Total', 'course']]
 
