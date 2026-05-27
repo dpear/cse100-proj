@@ -7,6 +7,11 @@ import pandas as pd
 import os
 import pickle
 from cse100proj.utils import load_config
+from scipy.stats import ks_2samp, mannwhitneyu, gaussian_kde
+
+
+import seaborn as sns
+
 
 config = load_config()
 PICKLES = config['data']['pickles_dir']
@@ -165,22 +170,15 @@ def plot_errors(results1, results2, errors, nrows, ncols, scale,
 
 ## plotting grade distributions ##
 
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-from scipy.stats import ks_2samp, mannwhitneyu, gaussian_kde
-import numpy as np
-
-kind = 'quartiles' # 'bar'
-
 def plot_category_grades_by_quarter(
     df_sub,
-    kind,
+    kind="quartiles",
 ):
-
+    """ Takes in df_sub and returns a plt object. 
+        kind can be 'quartiles' to show vertical bars for quartiles and median,
+        or 'bars' to show KDE-based horizontal bars at the distribution peaks."""
+    
     assert kind in ['quartiles', 'bars'], "kind must be 'quartiles' or 'bars'"
-
-    plt.clf()
 
     cols = ["Preparation", "Application", "Examination", "Overall"]
 
@@ -444,4 +442,3 @@ def plot_category_grades_by_quarter(
     print(f"\nSaved figure to {fout}\n")
 
     return plt
-plt.show()

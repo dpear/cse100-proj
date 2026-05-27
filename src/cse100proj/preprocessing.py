@@ -99,3 +99,26 @@ def add_atrisk_column(df, threshold=70):
     return df
 
 
+def get_df_sub(files):
+
+    df1 = get_df(files[6])
+    df2 = get_df(files[7])
+
+    df1['quarter'] = 'winter'
+    df1['year'] = 2025
+    df1['course'] = df1['quarter'].astype(str) + df1['year'].astype(str)
+    df1['exam_type'] = 'inperson'         
+
+    df2['quarter'] = 'fall'
+    df2['year'] = 2025
+    df2['course'] = df2['quarter'].astype(str) + df2['year'].astype(str)
+    df2['exam_type'] = 'inperson'    
+
+    print(df.columns)
+
+    df = pd.concat([df1, df2], ignore_index=True)
+    df_sub = df[['Preparation','Application', 'Examination', 'Total', 'course']]
+
+    df_sub['min_category'] = df_sub[['Preparation','Application', 'Examination']].idxmin(axis=1)
+
+    return df_sub
