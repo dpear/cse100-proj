@@ -10,3 +10,6 @@ __pycache__/
 
 # VSCode Settings
 .vscode
+
+# Paper documents
+paper/
