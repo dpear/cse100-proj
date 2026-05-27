@@ -444,7 +444,13 @@ def plot_category_grades_by_quarter(
     return plt
 
 
-def plot_min_grade_by_quarter(df_sub):
+def plot_min_grade_by_quarter(
+    df_sub,
+    fout,
+    title,
+    labels,
+    sep_category="course",
+):
     """ Plot the minimum grade by quarter to check for 
         any differences in min grade cat distributions. """
     
@@ -462,7 +468,7 @@ def plot_min_grade_by_quarter(df_sub):
     # Counts
     counts = (
         df_sub
-        .groupby(["course", "min_category"])
+        .groupby([sep_category, "min_category"])
         .size()
         .unstack(fill_value=0)
         .reindex(course_order)
@@ -512,7 +518,7 @@ def plot_min_grade_by_quarter(df_sub):
             color="0.25"
         )
 
-    ax.set_title("Minimum Grade Category by Quarter", fontsize=16, pad=12)
+    ax.set_title(title, fontsize=16, pad=12)
     ax.set_ylabel("Proportion of students", fontsize=12)
     ax.set_xlabel("")
     ax.set_ylim(0, 1.08)
