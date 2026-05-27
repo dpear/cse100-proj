@@ -442,3 +442,114 @@ def plot_category_grades_by_quarter(
     print(f"\nSaved figure to {fout}\n")
 
     return plt
+
+
+def plot_min_grade_by_quarter(df_sub):
+    """ Plot the minimum grade by quarter to check for 
+        any differences in min grade cat distributions. """
+    
+    
+    # Set desired course order
+    course_order = ["winter2025", "fall2025"]
+    labels = {
+        "winter2025": "Q1 (Remote exams)",
+        "fall2025": "Q2 (In-person exams)"
+    }
+
+    # Set category order explicitly
+    cat_order = ["Application", "Examination", "Preparation"]
+
+    # Counts
+    counts = (
+        df_sub
+        .groupby(["course", "min_category"])
+        .size()
+        .unstack(fill_value=0)
+        .reindex(course_order)
+        .reindex(columns=cat_order)
+    )
+
+    # Proportions
+    props = counts.div(counts.sum(axis=1), axis=0)
+
+    fig, ax = plt.subplots(figsize=(6.2, 4.2))
+
+    bottom = np.zeros(len(props))
+
+    # Muted, publication-friendly colors
+    color_map = {
+        "Application": "#4C72B0",
+        "Examination": "#6E6E6E",
+        "Preparation": "#55A868"
+    }
+
+    x = np.arange(len(props.index))
+
+    for cat in cat_order:
+        ax.bar(
+            x,
+            props[cat],
+            bottom=bottom,
+            label=cat,
+            color=color_map[cat],
+            edgecolor="white",
+            linewidth=1.2,
+            width=0.82
+        )
+        bottom += props[cat].values
+
+    # Add n labels above bars
+    ns = counts.sum(axis=1)
+
+    for i, course in enumerate(props.index):
+        ax.text(
+            i,
+            1.025,
+            f"n = {ns.loc[course]}",
+            ha="center",
+            va="bottom",
+            fontsize=12,
+            color="0.25"
+        )
+
+    ax.set_title("Minimum Grade Category by Quarter", fontsize=16, pad=12)
+    ax.set_ylabel("Proportion of students", fontsize=12)
+    ax.set_xlabel("")
+    ax.set_ylim(0, 1.08)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels([labels[c] for c in props.index], fontsize=12)
+
+    # Clean axes
+    ax.spines[["top", "right"]].set_visible(False)
+    ax.grid(axis="y", alpha=0.25)
+    ax.set_axisbelow(True)
+
+    # Better p-value formatting
+    ax.text(
+        0.5, -0.152,
+        r"$\chi^2$ test: $p < 0.001$",
+        transform=ax.transAxes,
+        ha="center",
+        va="top",
+        fontsize=11
+    )
+
+    # Legend outside
+    ax.legend(
+        title="Min category",
+        frameon=False,
+        bbox_to_anchor=(.95, 1),
+        loc="upper left",
+        fontsize=11,
+        title_fontsize=12,
+    )
+    ax.grid(False)
+
+    plt.tight_layout()
+    
+    fout = "out/min_category_comparison"
+    plt.savefig(f"{fout}.png", bbox_inches="tight", dpi=600)
+    plt.savefig(f"{fout}.svg", bbox_inches="tight")
+    
+    print(f"\nSaved figure to {fout}.png and {fout}.svg\n")
