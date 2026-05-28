@@ -9,3 +9,20 @@ logging:
 model_comparison:
   binary_metrics: ['pr_auc', 'accuracy', 'precision', 'recall', 'f1']
   regression_metrics: ['rmse', 'mae', 'r2']
+
+cat_comparison_by_q:
+  fout: "out/min_category_comparison"
+  course_order: ["winter2025", "fall2025"]
+  title: "Minimum Grade Category by Quarter"
+  labels: 
+    winter2025: "Q1 (Remote exams)"
+    fall2025: "Q2 (In-person exams)"
+
+cat_comparison_by_atrisk:
+  fout: "out/min_category_comparison_by_atrisk"
+  title: "Minimum Grade Category by Passing Status"
+  course_order: [True, False]
+  labels: 
+    True: "Failing students"
+    False: "Passing students"
+
