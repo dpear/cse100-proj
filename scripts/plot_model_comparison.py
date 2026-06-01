@@ -10,10 +10,12 @@ from cse100proj.utils import load_config
 
 from cse100proj.plotting import (
     plot_errors,
-    
+    plot_errors_gs,
 )
 
 from cse100proj.modeling import (
+    filter_models_by_threshold,
+    rank_df_based_on_metric,
     rank_models,
 )
 
@@ -104,3 +106,39 @@ f = plot_errors(results1_reg, results2_reg,
                 fontsize=10
 )
 f.savefig('out/model_comparison/regression_top2.png', dpi=300)
+
+
+############
+
+LIMITS = {
+    'accuracy': .5,
+    'precision': .5,
+    'recall': .5,
+    'f1': .5,
+    'pr_auc': .6
+}
+
+metrics = ['accuracy', 'precision', 'recall', 'f1', 'pr_auc']
+models = list(results1_bin.keys())
+
+dfs = {}
+for metric in metrics:
+    dfs[metric] = rank_df_based_on_metric(metric=metric)
+full_df = dfs[metrics[0]]
+for i in range(1, len(metrics)):
+    full_df = full_df.merge(dfs[metrics[i]], on='model')
+    
+filtered_df = filter_models_by_threshold(full_df, LIMITS)
+top_models = filtered_df['model'].tolist()
+
+f = plot_errors_gs(
+    results1_bin,
+    results2_bin,
+    figsize=(17, 17),
+    fontsize=15,
+    width_ratios=[5, 1, 1],
+    limit_models_to=top_models,
+)
+fname = 'binary_top_multi_metric_13_rqs'
+f.savefig(f'out/model_comparison/{fname}.png', dpi=300)
+f.savefig(f'out/model_comparison/{fname}.svg', dpi=300)

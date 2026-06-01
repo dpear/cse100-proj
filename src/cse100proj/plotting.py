@@ -1,4 +1,5 @@
 import math
+from matplotlib import gridspec
 import mplcursors
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
@@ -559,3 +560,185 @@ def plot_min_grade_by_quarter(
     plt.savefig(f"{fout}.svg", bbox_inches="tight")
     
     print(f"\nSaved figure to {fout}.png and {fout}.svg\n")
+    
+    
+
+def plot_errors_gs(results1, results2, 
+                errors=["pr_auc",   "f1", "recall", "precision", "accuracy"],
+                ylabs=["PR-AUC", "F1 Score", "Precision", "Recall", "Accuracy"],
+                special_model='CategoricalNB',
+                ylim=None, threshold=None, 
+                thresh_direction=None,
+                limit_models_to=None,
+                fontsize=5,
+                figsize=(17, 17),
+                width_ratios=[5, 2, 2],
+                vline_at=13):
+    """
+    Plot model errors with a dedicated GridSpec legend column.
+    """
+
+    fig = plt.figure(figsize=figsize)
+
+    # Main layout: plots on left, legend on right
+    gs = gridspec.GridSpec(
+        nrows=len(errors),
+        ncols=3,
+        width_ratios=width_ratios,
+        wspace=0.35,
+        hspace=0.25,
+        figure=fig,
+    )
+
+    axes = [fig.add_subplot(gs[i, 0]) for i in range(len(errors))]
+    
+    legend_ax1 = fig.add_subplot(gs[:, 1])
+    legend_ax2 = fig.add_subplot(gs[:, 2])
+    
+    legend_ax1.axis("off")
+    legend_ax2.axis("off")
+
+    cmap = plt.get_cmap("viridis")
+    
+    if limit_models_to:
+        results1 = {k: v for k, v in results1.items() if k in limit_models_to}
+        results2 = {k: v for k, v in results2.items() if k in limit_models_to}
+        
+    models = sorted(set(results1.keys()) | set(results2.keys()))
+        
+    color_array = cmap(np.linspace(0, 1, len(models)))
+    colors = {model: color for model, color in zip(models, color_array)}
+
+    plotted_lines = []
+
+    def add_errors_to_plot(results, line_type, marker, dataset_label):
+        for model, info in results.items():
+            for i, metric in enumerate(errors):
+
+                ax = axes[i]
+
+                x = info["x"]
+                y = info[metric]
+                
+                if threshold and thresh_direction == "higher":
+                    try:
+                        if max(y) < threshold[metric]:
+                            continue
+                    except Exception:
+                        pass
+                    
+                if threshold and thresh_direction == "lower":
+                    try:
+                        if min(y) > threshold[metric]:
+                            continue
+                    except Exception:
+                        pass
+
+                if len(y) == 0:
+                    continue
+
+                if len(x) != len(y):
+                    print(
+                        f"Warning: length mismatch for {model} on {metric} "
+                        f"(x: {len(x)}, y: {len(y)})"
+                    )
+                    x = x[:len(y)]
+                    
+                is_special = model == special_model
+                line, = ax.plot(
+                    x, y,
+                    marker=marker,
+                    label=f"{model} {dataset_label}",
+                    linestyle=line_type,
+                    color=colors[model],
+                    linewidth=4 if is_special else 1.5,
+                    zorder=10 if is_special else 1,
+                    alpha=1.0 if is_special else 0.6
+                )
+
+                # x and y labels only on leftmost plots
+                ax.set_ylabel(ylabs[i], fontsize=fontsize+3)
+                if i == len(errors) - 1:
+                    ax.set_xlabel("Number of RQs Used", fontsize=fontsize+3)
+                else:
+                    ax.set_xlabel("")
+
+                if ylim and metric in ylim:
+                    ax.set_ylim(ylim[metric])
+
+                # # old mplcursors hover metadata
+                # line._hover_model = model
+                # line._hover_metric = metric
+                # line._hover_dataset = dataset_label
+
+                # plotted_lines.append(line)
+
+    add_errors_to_plot(results1, line_type="-", marker="o", dataset_label="Q1")
+    add_errors_to_plot(results2, line_type="--", marker="x", dataset_label="Q2")
+
+    # Build legend manually from model colors
+    # Get one handle per model
+    handles1 = []
+    handles2 = []
+    
+    labels1 = []
+    labels2 = []
+    
+    seen = set()
+
+    def process_label(label):
+        """ Text processing to make model names more readable in the legend."""
+        label = label.replace(" Q1", "").replace(" Q2", "")
+        label = label.replace("Classifier", "")
+        label = label.replace("DiscriminantAnalysis", "\nDiscriminantAnalysis")
+        
+        return label.strip()
+
+    for ax in axes:
+        h, l = ax.get_legend_handles_labels()
+        print(f"Handles: {len(h)}, Labels: {len(l)}")
+        for handle, label in zip(h, l):
+            if label not in seen:
+                if "Q1" in label:
+                    handles1.append(handle)
+                    labels1.append(process_label(label))
+                elif "Q2" in label:
+                    handles2.append(handle)
+                    labels2.append(process_label(label))
+                seen.add(label)
+
+        if vline_at:
+            ax.axvline(vline_at, color='gray', linestyle='--', alpha=0.5)
+
+        
+    print(f"Length of handles1: {len(handles1)}, Length of labels1: {len(labels1)}")
+    print(f"Length of handles2: {len(handles2)}, Length of labels2: {len(labels2)}")
+    # Split legend into two columns manually
+
+    legend_ax1.legend(
+        handles1,
+        labels1,
+        loc="center left",
+        frameon=False,
+        fontsize=fontsize,
+        title_fontsize=fontsize+3,
+        title="Q1 Models"
+    )
+
+    legend_ax2.legend(
+        handles2,
+        labels2,
+        loc="center left",
+        frameon=False,
+        fontsize=fontsize,
+        title_fontsize=fontsize+3,
+        title="Q2 Models"
+    )
+    
+    fig.suptitle(
+        "Model Performance Comparison",
+        fontsize=fontsize+6,
+        y=0.93
+    )
+
+    return fig

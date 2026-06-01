@@ -3,6 +3,7 @@ from cse100proj.utils import load_config
 import pandas as pd
 import numpy as np
 import os
+import pickle
 
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import cross_validate, StratifiedKFold
@@ -15,6 +16,17 @@ from sklearn.utils import all_estimators
 from cse100proj.preprocessing import (
     get_reg_cols,
 )
+
+
+config = load_config()
+PICKLES = config['data']['pickles_dir']
+
+with open(PICKLES + '/results1_bin.pkl', 'rb') as f:
+    results1_bin = pickle.load(f)
+
+with open(PICKLES + '/results2_bin.pkl', 'rb') as f:
+    results2_bin = pickle.load(f)
+
 
 def report_error_bin(clf, X, y, cv=5):
     """
@@ -245,3 +257,42 @@ def rank_models(results, metric, top_k=5, higher_is_better=True):
     sorted_models = sorted(model_scores.items(), key=lambda x: x[1], reverse=higher_is_better)
     
     return sorted_models[:top_k]
+
+
+def rank_df_based_on_metric(
+    quarter="Q1",
+    metric="pr_auc",
+    rqs=13,
+):
+    results = results1_bin if quarter == "Q1" else results2_bin
+    ranked_df = []
+
+    for model, info in results.items():
+        try:
+            metric_at_k = info[metric][rqs - 1]  # rqs-1 because of 0-indexing
+        except IndexError:
+            print(f"{model}: Not enough data points to get {metric} at {rqs} RQs")
+            metric_at_k = 0
+        ranked_df.append({'model': model, f'{metric}_at_{rqs}_RQs': metric_at_k})
+    
+    ranked_df = pd.DataFrame(ranked_df).sort_values(by=f'{metric}_at_{rqs}_RQs', ascending=False)
+    return ranked_df
+
+
+def filter_models_by_threshold(df, limits):
+    """ Filters the DataFrame of models based on specified metric thresholds."""
+    
+    metrics = ['accuracy', 'precision', 'recall', 'f1', 'pr_auc']
+    models = list(results1_bin.keys())
+
+    dfs = {}
+    for metric in metrics:
+        dfs[metric] = rank_df_based_on_metric(metric=metric)
+    full_df = dfs[metrics[0]]
+    for i in range(1, len(metrics)):
+        full_df = full_df.merge(dfs[metrics[i]], on='model')
+        
+    for metric, threshold in limits.items():
+        df = df[df[f'{metric}_at_13_RQs'] >= threshold]
+
+    return df
