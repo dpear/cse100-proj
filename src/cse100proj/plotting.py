@@ -450,6 +450,7 @@ def plot_min_grade_by_quarter(
     fout,
     title,
     labels,
+    chisq_msg='',
     sep_category="course",
 ):
     """ Plot the minimum grade by quarter to check for 
@@ -457,11 +458,7 @@ def plot_min_grade_by_quarter(
     
     
     # Set desired course order
-    course_order = ["winter2025", "fall2025"]
-    labels = {
-        "winter2025": "Q1 (Remote exams)",
-        "fall2025": "Q2 (In-person exams)"
-    }
+    course_order = list(labels.keys())
 
     # Set category order explicitly
     cat_order = ["Application", "Examination", "Preparation"]
@@ -535,7 +532,7 @@ def plot_min_grade_by_quarter(
     # Better p-value formatting
     ax.text(
         0.5, -0.152,
-        r"$\chi^2$ test: $p < 0.001$",
+        chisq_msg, # what the pvalue is
         transform=ax.transAxes,
         ha="center",
         va="top",
@@ -562,7 +559,6 @@ def plot_min_grade_by_quarter(
     print(f"\nSaved figure to {fout}.png and {fout}.svg\n")
     
     
-
 def plot_errors_gs(results1, results2, 
                 errors=["pr_auc",   "f1", "recall", "precision", "accuracy"],
                 ylabs=["PR-AUC", "F1 Score", "Precision", "Recall", "Accuracy"],

@@ -31,6 +31,7 @@ plot_min_grade_by_quarter(
     fout=config['cat_comparison_by_q']['fout'],
     title=config['cat_comparison_by_q']['title'],
     labels=config['cat_comparison_by_q']['labels'], 
+    chisq_msg=r"$\chi^2$ test: * $p < 0.001$",
     sep_category="course"
 )
 
@@ -40,5 +41,6 @@ plot_min_grade_by_quarter(
     fout=config['cat_comparison_by_atrisk']['fout'],
     title=config['cat_comparison_by_atrisk']['title'],
     labels=config['cat_comparison_by_atrisk']['labels'], 
+    chisq_msg=r"$\chi^2$ test: $p = 1.00e-01$",
     sep_category="atrisk"
 )

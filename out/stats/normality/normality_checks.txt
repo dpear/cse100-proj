@@ -1,0 +1,88 @@
+
+--- Checking normality for Q1 Preparation ---
+=== Normality Checks ===
+Shapiro-Wilk p=1.025e-25
+D'Agostino K² p=1.63e-42
+Anderson-Darling stat=35.42
+  15.0%: 0.56
+  10.0%: 0.63
+  5.0%: 0.751
+  2.5%: 0.872
+  1.0%: 1.033
+
+--- Checking normality for Q2 Preparation ---
+=== Normality Checks ===
+Shapiro-Wilk p=5.16e-22
+D'Agostino K² p=1.204e-37
+Anderson-Darling stat=22.93
+  15.0%: 0.56
+  10.0%: 0.63
+  5.0%: 0.75
+  2.5%: 0.871
+  1.0%: 1.033
+
+--- Checking normality for Q1 Application ---
+=== Normality Checks ===
+Shapiro-Wilk p=9.047e-31
+D'Agostino K² p=8.764e-78
+Anderson-Darling stat=51.57
+  15.0%: 0.56
+  10.0%: 0.63
+  5.0%: 0.751
+  2.5%: 0.872
+  1.0%: 1.033
+
+--- Checking normality for Q2 Application ---
+=== Normality Checks ===
+Shapiro-Wilk p=3.209e-27
+D'Agostino K² p=7.383e-56
+Anderson-Darling stat=44.53
+  15.0%: 0.56
+  10.0%: 0.63
+  5.0%: 0.75
+  2.5%: 0.871
+  1.0%: 1.033
+
+--- Checking normality for Q1 Examination ---
+=== Normality Checks ===
+Shapiro-Wilk p=7.362e-32
+D'Agostino K² p=1.513e-110
+Anderson-Darling stat=41.58
+  15.0%: 0.56
+  10.0%: 0.63
+  5.0%: 0.751
+  2.5%: 0.872
+  1.0%: 1.033
+
+--- Checking normality for Q2 Examination ---
+=== Normality Checks ===
+Shapiro-Wilk p=4.117e-21
+D'Agostino K² p=1.782e-34
+Anderson-Darling stat=20.5
+  15.0%: 0.56
+  10.0%: 0.63
+  5.0%: 0.75
+  2.5%: 0.871
+  1.0%: 1.033
+
+--- Checking normality for Q1 Total ---
+=== Normality Checks ===
+Shapiro-Wilk p=1.234e-25
+D'Agostino K² p=6.156e-60
+Anderson-Darling stat=30.65
+  15.0%: 0.56
+  10.0%: 0.63
+  5.0%: 0.751
+  2.5%: 0.872
+  1.0%: 1.033
+
+--- Checking normality for Q2 Total ---
+=== Normality Checks ===
+Shapiro-Wilk p=1.965e-19
+D'Agostino K² p=2.55e-30
+Anderson-Darling stat=16.94
+  15.0%: 0.56
+  10.0%: 0.63
+  5.0%: 0.75
+  2.5%: 0.871
+  1.0%: 1.033
