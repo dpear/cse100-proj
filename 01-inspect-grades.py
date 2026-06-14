@@ -1,43 +1,15 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[299]:
-
-
-# qiime2-amplicon-2023.9
 
 import pandas as pd
 import numpy as np
-
 import seaborn as sns
 import matplotlib.pyplot as plt
-
 import os
 import re
-
 from scipy.stats import gaussian_kde, ks_2samp, mannwhitneyu
-
-
-# In[265]:
-
 
 DIR = "./grades/"
 files = os.listdir(DIR)
 files = sorted(files)
-files
-
-
-# In[266]:
-
-
-f = '08-Grades_CSE100_2025-4_Fall.xlsx'
-match = re.search(r'(\d{4})-\d+_(Fall|Winter|Spring|Summer)', f)
-year_term = f"{match.group(1)}_{match.group(2)}"
-year_term
-
-
-# In[267]:
-
 
 def get_df(f):
     """ Read in the grades excel file, skip first row """
@@ -78,11 +50,6 @@ def get_remote_section_name(df):
     return None
 
 
-# In[305]:
-
-
-# INITIATE PLOT
-fig, axes = plt.subplots(1, 8, figsize=(28, 4))
 
 def generate_plots(exam=False):
     
@@ -182,13 +149,11 @@ def generate_plots(exam=False):
     axes[-1].legend(loc='lower center', bbox_to_anchor=(0.5, -0.02))
     return fig
 
+fig, axes = plt.subplots(1, 8, figsize=(28, 4))
 fig = generate_plots(exam=True)
 fig.suptitle("Final Exam Distributions by Section", fontsize=16, y=1.03)
 fig.savefig("out/final_exam_distributions.png", bbox_inches="tight", dpi=300)
 plt.show()
-
-
-# In[306]:
 
 
 plt.clf()
@@ -197,93 +162,3 @@ fig = generate_plots(exam=False)
 fig.suptitle("Final Grade Distributions by Section", fontsize=16, y=1.03)
 fig.savefig("out/final_grade_distributions.png", bbox_inches="tight", dpi=300)
 plt.show()
-
-
-# In[270]:
-
-
-df.head()
-
-
-# In[271]:
-
-
-# INITIATE PLOT
-fig, axes = plt.subplots(1, 8, figsize=(28, 4))
-
-def generate_plots():
-    
-    for i in range(len(files)):
-        
-        ax = axes[i]
-        file_name = files[i]
-        title = find_title(file_name)
-        df = get_df(file_name)
-
-        inperson = get_inperson_section_name(df)
-        remote = get_remote_section_name(df)
-        score = get_final_col_name(df)
-
-        # left and right are arrays of values for remote vs. in person
-        left = df.loc[df["Section"] == inperson, score].dropna().to_numpy()
-        right = df.loc[df["Section"] == remote, score].dropna().to_numpy()
-
-        # If one of the sides is empty, skip
-        try:
-            y = np.linspace(min(left.min(), right.min()), max(left.max(), right.max()), 2000)
-        except ValueError:
-            print('Skipping', title)
-            continue
-
-        # Get the kernel density estimates to draw the violin sides
-        kde_left = gaussian_kde(left)
-        kde_right = gaussian_kde(right)
-
-        w_left = kde_left(y)
-        w_right = kde_right(y)
-
-        # Split violin
-        ax.fill_betweenx(y, -w_left, 0, alpha=0.6, label='in person')
-        ax.fill_betweenx(y, 0, w_right, alpha=0.6, label='remote')
-        ax.axvline(0, color="black", linewidth=1)
-
-        def kde_width_at(kde, y_grid, widths, y0):
-            return float(np.interp(y0, y_grid, widths))
-
-        # ADD LEFT LINE
-        grid_l = np.linspace(left.min(), left.max(), 2000)  # dense grid helps
-        dens_l = kde_left(grid_l)
-        mode_est_l = grid_l[np.argmax(dens_l)]  # y-value where KDE is maximal
-        wl = kde_width_at(kde_left, grid_l, dens_l, mode_est_l)
-        ax.hlines(mode_est_l, xmin=-wl, xmax=0, linewidth=1.8, color="black")
-
-        # ADD RIGHT LINE
-        grid_r = np.linspace(right.min(), right.max(), 2000)  # dense grid helps
-        dens_r = kde_right(grid_r)
-        mode_est_r = grid_r[np.argmax(dens_r)]  # y-value where KDE is maximal
-        wr = kde_width_at(kde_right, grid_r, dens_r, mode_est_r)
-        ax.hlines(mode_est_r, xmin=0, xmax=wr, linewidth=1.8, color="black")
-
-
-        # KS test annotation
-        ks = ks_2samp(left, right, alternative="two-sided", mode="auto")
-        ax.text(
-            0.5, 0.98,
-            f"KS test: D={ks.statistic:.3g}, p={ks.pvalue:.3g}",
-            transform=ax.transAxes,
-            ha="center", va="top"
-        )
-
-        ax.set_xticks([])
-        ax.set_ylabel("value")
-        ax.set_title(title)
-
-    plt.tight_layout()
-    axes[-1].legend(loc='lower center', bbox_to_anchor=(0.5, -0.02))
-    return fig
-
-fig = generate_plots()
-fig.savefig("out/final_grade_distributions.png", dpi=300)
-fig.suptitle("Final Exam Distributions by Section", fontsize=16, y=1.03)
-plt.show()
-

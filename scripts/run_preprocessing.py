@@ -50,5 +50,5 @@ df2_sel['min_category'] = df2_sel[['Preparation', 'Application', 'Examination']]
 df1_sel = add_atrisk_column(df1_sel)
 df2_sel = add_atrisk_column(df2_sel)
 
-df1_sel.to_csv(config['data']['processed_dir'] + 'winter2025.csv', index=False)
-df2_sel.to_csv(config['data']['processed_dir'] + 'fall2025.csv',   index=False)
+df1_sel.to_csv(config['data']['processed_dir'] + 'winter2025-57.csv', index=False)
+df2_sel.to_csv(config['data']['processed_dir'] + 'fall2025-57.csv',   index=False)
