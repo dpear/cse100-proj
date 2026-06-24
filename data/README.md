@@ -25,3 +25,11 @@ The following columns should be in files 07 and 08:
 - `Midterm`: Grade on the midterm
 - `Final`: Grade on the final
 - Columns that describe reading quiz grades, either numbered, or by date, with `Reading Quiz` in the name, in order of when they were administered.
+---
+## Processed Data
+The `processed` folder should contain the following 3 files:
+- df_sub.csv
+- df1_sel.csv
+- df2_sel.csv
+
+These contain the processed columns necessary for analysis and are produced by `01-analysis.ipynb`, for Winter 2025 (Q1) and Fall 2025 (Q2).
