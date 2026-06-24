@@ -1,25 +1,5 @@
-## CSE100 vs. CSE100R Analysis
+## CSE100 Analysis
 
-This folder contains analyses for comparing CSE100 vs. CSE100R.
-- `data`: Folder contains the raw and processed data
-- `info`: Contains relevant info docs
-- `out`: Outputs from analyses, figures, tables, and logs
-- `scripts`: Scripts for running classification tasks etc.
-- `src`: Reusable logic
-<!-- - `notebooks`: Notebooks for running interactive plots -->
-
-To run any of the scripts in this folder, first set up the conda environment:
-```
-conda env create -f config/environment.yml
-```
-
-Then activate and install:
-```
-conda activate cse100proj
-pip install -e .
-```
-
-### TODO
-- Fix logging
-- Add grade category analysis
-- Add interactive hover notebook for model comparison
+This folder contains notebooks for comparing Fall 2025 to Winter 2025 grades and for classification of pass vs. failing students:
+- `01-analysis.ipynb`: Preprocesses grade data and does statistical tests to compare categories between the two quarters
+- `02-classification.ipynb`: Performs the binary classification
