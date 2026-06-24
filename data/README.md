@@ -11,18 +11,17 @@ The `raw` folder should contain the following 8 files:
 - 08-Grades_CSE100_2025-4_Fall.xlsx
 
 These contain grade information from the respective course offerings of CSE100 / CSE100R.
-Some of the column names are duplicates because when viewed as a spreadsheet, the first occurence of a column contains the raw score and the second occurence contains the grade out of the total number of points the assignment was worth. This information is stored in the first column, so when reading in data, we will skip this first line and when processing columns, we will use the second occurence of a column.
+Some of the column names are duplicates because when viewed as a spreadsheet, the first occurence of a column contains the raw score and the second occurence contains the grade out of the total number of points the assignment was worth. This information is stored in the first ROW, so when reading in data, we will skip this first ROW and when processing columns, we will use the SECOND occurence of a column for the % grade.
 
 For the paper, only the last two files, or grades from **Winter 2025** and **Fall 2025** are considered because the course structure was slightly different for all other iterations, therefore it's not best practice to compare all quarters.
 
 ### Columns
 
 The following columns should be in files 07 and 08:
-- `Section`: CSE100R or CSE100 (remote or in person)
 - `Preparation`: Preparation category grade
 - `Examination`: Examination category grade
 - `Application`: Application category grade
-- `Overall`: Students overall grade
+- `Total`: Students overall grade. This will be renamed to `Overall`
 - `Midterm`: Grade on the midterm
 - `Final`: Grade on the final
-- Columns that describe reading quiz grades, either numbered, or by date
+- Columns that describe reading quiz grades, either numbered, or by date, with `Reading Quiz` in the name, in order of when they were administered.
