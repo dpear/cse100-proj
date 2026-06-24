@@ -1,6 +1,0 @@
-model	pr_auc_at_13_RQs	precision_at_13_RQs	f1_at_13_RQs	recall_at_13_RQs	accuracy_at_13_RQs
-CategoricalNB	0.76	0.68	0.67	0.70	0.93
-NearestCentroid	0.72	0.57	0.65	0.76	0.91
-LinearDiscriminantAnalysis	0.71	0.71	0.67	0.64	0.93
-AdaBoostClassifier	0.70	0.76	0.61	0.53	0.93
-BernoulliNB	0.67	0.70	0.63	0.61	0.93
